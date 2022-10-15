@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: nginx-ingress-certificate
+  namespace: default
+spec:
+  secretName: nginx-ingress-tls
+  issuerRef:
+    name: selfsigned-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
+  commonName: nginx.192.168.109.20.nip.io
+  dnsNames:
+  - nginx.192.168.109.20.nip.io

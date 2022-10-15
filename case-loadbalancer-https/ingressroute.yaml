@@ -1,0 +1,15 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nginx-ingressroute
+  namespace: default
+spec:
+  routes:
+  - match: Host(`nginx.192.168.109.20.nip.io`) && PathPrefix(`/`)
+    kind: Rule
+    services:
+    - name: nginx
+      namespace: default
+      port: 8080
+  tls:                          
+    secretName: nginx-ingress-tls

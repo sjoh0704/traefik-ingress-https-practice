@@ -1,0 +1,26 @@
+# 이 파일은 안됨 
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: nginx-ingress
+#   annotations:
+#     # add an annotation indicating the issuer to use.
+#     cert-manager.io/cluster-issuer: selfsigned-issuer
+#     nginx.ingress.kubernetes.io/rewrite-target: /
+#     kubernetes.io/ingress.class: traefik
+# spec:
+#   rules:
+#   - host: nginx.192.168.109.20.nip.io # 원하는 subdomain.[loadbalancer ip].nip.io로 설정
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: nginx
+#             port:
+#               number: 8080
+#   tls:
+#   - hosts:
+#     - nginx.192.168.109.20.nip.io
+#     secretName: nginx-ingress-tls

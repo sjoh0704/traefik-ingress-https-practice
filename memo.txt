@@ -1,0 +1,53 @@
+1. nodeport
+
+1) http
+[traefik]
+helm repo add traefik https://helm.traefik.io/traefik
+helm repo update
+helm pull traefik/traefik --untar
+
+values.yaml 변경 
+ingressClass.enabled: true
+ingressClass.isDefaultClass: true
+service.type: NodePort 
+ports.web.nodePort: 32080
+ports.websecure.nodePort: 32443
+
+
+kubectl create ns traefik
+helm install traefik ./traefik -n traefik
+
+kubectl apply -f case-nodeport/.
+
+http://nginx.192.168.9.37.nip.io:32080/ 로 접속 가능
+
+2. lb
+metal lb를 사용
+service.type: LoadBalancer
+providers.kubernetesIngress.publishedService.enabled: true
+helm upgrade traefik . -n traefik
+
+lb ip 얻기 
+kubectl get svc traefik -n traefik -o jsonpath={.status.loadBalancer.ingress[0].ip}
+
+kubectl apply -f case-loadbalancer/.
+
+nginx.192.168.109.20.nip.io 로 접속 가능
+
+
+3) lb - https
+[cert-manager]
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+helm pull jetstack/cert-manager --untar
+
+values.yaml 변경
+installCRDs: true
+kubectl create ns cert-manager
+helm install cert-manager ./cert-manager -n cert-manager
+
+kubectl apply -f ./case-loadbalancer-https
+ingress가 안되서 ingress-route로 교체
+
+helm install --generate-name --dry-run .
+
